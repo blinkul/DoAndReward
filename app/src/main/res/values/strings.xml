@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">DoAndReward</string>
+    <string name="add_objective">Add Objective</string>
+    <string name="add_prize">Add Prize</string>
+    <string name="revert_history_button">Revert to selected</string>
+    <string name="goToPrizePage">P</string>
+    <string name="add">Add</string>
+    <string name="description">Description</string>
+    <string name="numeric_hint">10</string>
+</resources>

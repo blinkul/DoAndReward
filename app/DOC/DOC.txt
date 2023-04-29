@@ -1,0 +1,2 @@
+Exemplu de app:
+https://github.com/ashishrawat2911/RoomDemo/tree/5648f99463b0068222856868c29f75011f592132/app/src/main/java/com/ashish/roomdemo
