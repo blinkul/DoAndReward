@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.doandreward.database.AppDatabase;
@@ -26,6 +29,7 @@ import java.util.concurrent.Future;
 
 TODO:
 [2] Nu pot cumpara daca nu am suficiente puncte
+    -- issue after swipe failed. Invisible row.
 [??] BUG: Cand ma joc cu history-ul se cam strica cand dau revert. Raman cele cu 9
 [6] Refactorizare
 [??] Teste > bune de facut mai ales daca il pun in Git
@@ -39,6 +43,7 @@ TODO:
 [4] - Improve Add Objective / Add prize activities
 
 [] Snackbar with Undo ?
+https://zatackcoder.com/swipe-to-delete-and-undo-feature-in-android-recyclerview/
 */
 
 public class MainActivity extends AppCompatActivity {

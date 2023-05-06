@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.doandreward.R;
 import com.example.doandreward.database.AppDatabase;
 import com.example.doandreward.database.AppExecutors;
-import com.example.doandreward.entities.Objective;
 import com.example.doandreward.entities.Prize;
 import com.example.doandreward.recyclerview.helper.BaseSwipeHelper;
 import com.example.doandreward.recyclerview.helper.SwipeUI;
@@ -30,7 +29,7 @@ public class PrizeAdaptor extends RecyclerView.Adapter<PrizeViewHolder>
     private List<Prize> prizeList;
     private final TextView tvTotalPoints;
     private AppDatabase database;
-
+    private int totalPoints;
     public PrizeAdaptor(Context context, TextView totalPoints) {
         this.tvTotalPoints = totalPoints;
         this.database = AppDatabase.getInstance();
@@ -110,14 +109,19 @@ public class PrizeAdaptor extends RecyclerView.Adapter<PrizeViewHolder>
 
     public boolean onComplete(int position) {
         Prize selectedPrize = prizeList.get(position);
-        selectedPrize.setUsed(true);
-        prizeList.remove(selectedPrize);
-        PointsHistoryAdaptor.addRecordToPointsHistory(selectedPrize.getCost(),
-                null, selectedPrize.getId(), tvTotalPoints, database);
-        executePrizeUpdate(selectedPrize);
-
-        this.notifyItemRemoved(position);
-        this.notifyItemRangeChanged(0, getItemCount());
+        if (totalPoints >= selectedPrize.getCost()) {
+            selectedPrize.setUsed(true);
+            prizeList.remove(selectedPrize);
+            PointsHistoryAdaptor.addRecordToPointsHistory(selectedPrize.getCost(),
+                    null, selectedPrize.getId(), tvTotalPoints, database);
+            executePrizeUpdate(selectedPrize);
+            this.notifyItemRemoved(position);
+            this.notifyItemRangeChanged(0, getItemCount());
+            return true;
+        }
+        Toast.makeText(context, "Not enough points!", Toast.LENGTH_SHORT).show();
+        //return view
+        notifyItemChanged(position);
         return true;
     }
 
@@ -143,6 +147,10 @@ public class PrizeAdaptor extends RecyclerView.Adapter<PrizeViewHolder>
         );
     }
 
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+
     private void executePrizeDelete(Prize prize) {
         Runnable runnable = () -> {
             database.prizeDao().deletePrize(prize);
@@ -156,4 +164,5 @@ public class PrizeAdaptor extends RecyclerView.Adapter<PrizeViewHolder>
         };
         AppExecutors.getInstance().getSingleThreadRunnable().execute(runnable);
     }
+
 }

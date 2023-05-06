@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.view.View;
 import android.widget.TextView;
 
@@ -49,7 +50,8 @@ public class PrizesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         adaptor.setPrizes(retrievePrizes());
-        retrievePointsHistory();
+        int total = retrievePointsHistory();
+        adaptor.setTotalPoints(total);
         ItemTouchHelper swipeHelper = new ItemTouchHelper(
                 new BaseSwipeHelper(PrizesActivity.this,
                         recyclerView,
@@ -86,18 +88,28 @@ public class PrizesActivity extends AppCompatActivity {
     }
 
     //TODO: This should be in a separate class (duplicate from MainActivity)
-    private void retrievePointsHistory() {
-        Runnable runnable = () -> {
+    private int retrievePointsHistory() {
+        Callable callable = () -> {
             final PointsHistory pointsHistory = database.pointsHistoryDao().getLatestRecordByDate();
             if (pointsHistory == null) {
                 runOnUiThread(() -> tvTotalPoints.setText("0"));
+                return 0;
             } else {
+                int total = pointsHistory.getUpdatedPoints();
                 runOnUiThread(() -> tvTotalPoints.setText(
-                        String.valueOf(pointsHistory.getUpdatedPoints()))
+                        String.valueOf(total))
                 );
+                return total;
             }
         };
 
-        AppExecutors.getInstance().getSingleThreadRunnable().execute(runnable);
+        Future<Integer> future = AppExecutors.getInstance().getSingleThreadCallable().submit(callable);
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

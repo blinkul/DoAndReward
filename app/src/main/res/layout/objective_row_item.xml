@@ -53,7 +53,7 @@
             <LinearLayout
                 android:id="@+id/drag_notification"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="2dp"
                 android:background="@android:color/holo_purple"
                 android:orientation="horizontal"
                 android:visibility="invisible" />

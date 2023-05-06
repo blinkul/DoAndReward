@@ -21,7 +21,7 @@ public class PrizeViewHolder extends RecyclerView.ViewHolder
 
         this.prizeDescription = view.findViewById(R.id.text_layout_prize_description);
         this.prizeCost = view.findViewById(R.id.text_layout_prize_cost);
-        this.dragNotification = view.findViewById(R.id.linear_layout_prize);
+        this.dragNotification = view.findViewById(R.id.drag_notification);
     }
 
     public TextView getPrizeDescription() { return this.prizeDescription; }
